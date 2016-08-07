@@ -34,8 +34,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define BUFFER_SIZE     4
-
+#define BUFFER_SIZE     10
+extern uint8_t aRxBuffer[BUFFER_SIZE];
+extern uint8_t flag_5ms;
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

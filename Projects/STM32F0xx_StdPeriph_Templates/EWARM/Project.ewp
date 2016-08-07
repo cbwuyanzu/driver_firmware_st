@@ -163,7 +163,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -402,6 +402,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -1100,7 +1104,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -1339,6 +1343,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -2037,7 +2045,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -2276,6 +2284,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -2898,7 +2910,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.10.1.6733</state>
+          <state>7.20.2.7418</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -2974,7 +2986,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -3020,7 +3032,7 @@
         </option>
         <option>
           <name>CCDiagSuppress</name>
-          <state></state>
+          <state>Pa050</state>
         </option>
         <option>
           <name>CCDiagRemark</name>
@@ -3109,12 +3121,12 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>D:\st\working</state>
-          <state>D:\st\working\Libraries\CMSIS</state>
-          <state>D:\st\working\Libraries\CMSIS\Device\ST\STM32F0xx\Include</state>
-          <state>D:\st\working\Libraries\STM32F0xx_StdPeriph_Driver\inc</state>
-          <state>D:\st\working\Projects\STM32F0xx_StdPeriph_Templates</state>
-          <state>D:\st\working\BSP</state>
+          <state>$PROJ_DIR$\..\..\..\</state>
+          <state>$PROJ_DIR$\..\..\..\Libraries\CMSIS</state>
+          <state>$PROJ_DIR$\..\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include</state>
+          <state>$PROJ_DIR$\..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc</state>
+          <state>$PROJ_DIR$\..\..\..\Projects\STM32F0xx_StdPeriph_Templates</state>
+          <state>$PROJ_DIR$\..\..\..\BSP</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -3219,6 +3231,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -3917,7 +3933,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -4156,6 +4172,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -4854,7 +4874,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -5093,6 +5113,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -5791,7 +5815,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -6030,6 +6054,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -6728,7 +6756,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -6967,6 +6995,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -7665,7 +7697,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>30</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -7904,6 +7936,10 @@
           <name>CCOptStrategySlave</name>
           <version>0</version>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>

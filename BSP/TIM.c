@@ -1,73 +1,139 @@
+//=============================================================================
+//TIM DRIVER
+//=============================================================================
 #include "TIM.h"
 
-void BEEP_Init(void)
+
+uint16_t PrescalerValue = 0;
+
+uint16_t TimerPeriod = 0;
+uint16_t Channel3Pulse = 0;
+
+//PWM INIT FOR STM32F030
+void PWM_Init(void)
 {
+  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+  TIM_OCInitTypeDef  TIM_OCInitStructure;
+  GPIO_InitTypeDef GPIO_InitStructure;
   
+  /* GPIOA Clocks enable */
+  RCC_AHBPeriphClockCmd(GPIO_CLC_PWM, ENABLE);
   
-  GPIO_InitTypeDef         GPIO_InitStructure;
+  /* GPIOA Configuration: Channel 3 as alternate function push-pull */
+  GPIO_InitStructure.GPIO_Pin = GPIO_PIN_PWM;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+  GPIO_Init(GPIO_PORT_PWM, &GPIO_InitStructure);
   
+  GPIO_PinAFConfig(GPIO_PORT_PWM, PIN_SOURCE_PWM, AF_PWM);
+  
+  /* TIM1 Configuration ---------------------------------------------------
+  Generate PWM signals:
+  TIM1 input clock (TIM1CLK) is set to APB2 clock (PCLK2)    
+  => TIM1CLK = PCLK2 = SystemCoreClock
+  TIM1CLK = SystemCoreClock, Prescaler = 0, TIM1 counter clock = SystemCoreClock
+  SystemCoreClock is set to 48 MHz for STM32F0xx devices
+  
+  The objective is to generate 7 PWM signal at 7.8 KHz:
+  - TIM1_Period = (SystemCoreClock / 7800) - 1
+  The channel 1 and channel 1N duty cycle is set to 50%
+
+  The Timer pulse is calculated as follows:
+  - ChannelxPulse = DutyCycle * (TIM1_Period - 1) / 100
+  
+  Note: 
+  SystemCoreClock variable holds HCLK frequency and is defined in system_stm32f0xx.c file.
+  Each time the core clock (HCLK) changes, user had to call SystemCoreClockUpdate()
+  function to update SystemCoreClock variable value. Otherwise, any configuration
+  based on this variable will be incorrect. 
+  ----------------------------------------------------------------------- */
+  /* Compute the value to be set in ARR regiter to generate signal frequency at 17.57 Khz */
+  TimerPeriod = (SystemCoreClock / FREQUENCY_PWM ) - 1;
+  /* Compute CCR1 value to generate a duty cycle at 50% for channel 1 and 1N */
+  Channel3Pulse = (uint16_t) (((uint32_t) INIT_DUTY * (TimerPeriod - 1)) / 1000);
+  
+  /* TIM14 clock enable */
+  RCC_APB1PeriphClockCmd(TIM_CLC_PWM , ENABLE);
+  
+  /* Time Base configuration */
+  TIM_TimeBaseStructure.TIM_Prescaler = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+  
+  TIM_TimeBaseInit(TIM_PWM, &TIM_TimeBaseStructure);
+  
+  /* Channel 3 Configuration in PWM mode */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = Channel3Pulse;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+  TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
+  TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
+  TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
+  
+  TIM_OC3Init(TIM_PWM, &TIM_OCInitStructure);
+  
+  /* TIM14 counter enable */
+  TIM_Cmd(TIM_PWM, ENABLE);
+  
+  /* TIM14 Main Output Enable */
+  TIM_CtrlPWMOutputs(TIM_PWM, ENABLE);
+}
+
+//CONFIG PWM DUTY FOR STM32F030
+void PWM_Set(uint16_t value){
+  Channel3Pulse = (uint16_t) (((uint32_t) value * (TimerPeriod - 1)) / 1000);
+  TIM_SetCompare3(TIM_PWM,Channel3Pulse);
+}
+
+
+void TIM_Init(void)
+{
   TIM_TimeBaseInitTypeDef TIM_BaseInitStructure;
   TIM_OCInitTypeDef TIM_OCInitStructure;
-  TIM_BDTRInitTypeDef TIM_BDTRInitStructure;
+  // TIM_BDTRInitTypeDef TIM_BDTRInitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
   
+  RCC_APB1PeriphClockCmd(TIM_CLC_TIMER, ENABLE); 
+  NVIC_InitStructure.NVIC_IRQChannel = IRQ_TIMER;
+  NVIC_InitStructure.NVIC_IRQChannelPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
   
-  RCC_AHBPeriphClockCmd( RCC_AHBPeriph_GPIOA, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-  
-  
-  
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
-  
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource8, GPIO_AF_2);
-  
-  
-  TIM_BaseInitStructure.TIM_Period = 500-1;
-  TIM_BaseInitStructure.TIM_Prescaler = 72-1;
-  TIM_BaseInitStructure.TIM_ClockDivision = 0;
+  PrescalerValue = (uint16_t) (SystemCoreClock  / FREQUENCY_TIMER) - 1;
+  TIM_BaseInitStructure.TIM_Period = 65535;
+  TIM_BaseInitStructure.TIM_Prescaler = 0;
+  TIM_BaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
   TIM_BaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
   TIM_BaseInitStructure.TIM_RepetitionCounter = 0;
-  TIM_TimeBaseInit(TIM1, &TIM_BaseInitStructure);
-  
-  //启用ARR的影子寄存器（直到产生更新事件才更改设置）
-  TIM_ARRPreloadConfig(TIM1, ENABLE);
-  //TIM1_OC1模块设置（设置1通道占空比）
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+  TIM_TimeBaseInit(TIM_TIMER, &TIM_BaseInitStructure);
+  TIM_PrescalerConfig(TIM_TIMER,PrescalerValue,TIM_PSCReloadMode_Immediate);
+  /* Output Compare Timing Mode configuration: Channel1 */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
   TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_Val;
   TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
   
-  TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
-  TIM_OCInitStructure.TIM_Pulse = 120;
-  TIM_OC1Init(TIM1, &TIM_OCInitStructure);
-  //启用CCR1寄存器的影子寄存器（直到产生更新事件才更改设置）
-  TIM_OC1PreloadConfig(TIM1, TIM_OCPreload_Enable);
-  //TIM2_OC2模块设置（设置2通道占空比）
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
-  TIM_OCInitStructure.TIM_Pulse = 680;
-  TIM_OC2Init(TIM1, &TIM_OCInitStructure);
-  //启用CCR2寄存器的影子寄存器（直到产生更新事件才更改设置）
-  TIM_OC2PreloadConfig(TIM1, TIM_OCPreload_Enable);
+  TIM_OC1Init(TIM_TIMER, &TIM_OCInitStructure);
   
+  TIM_OC1PreloadConfig(TIM_TIMER, TIM_OCPreload_Disable);
   
+  /* TIM Interrupts enable */
+  TIM_ITConfig(TIM_TIMER, TIM_IT_CC1, ENABLE);
   
-  //死区设置
-  TIM_BDTRInitStructure.TIM_OSSRState = TIM_OSSRState_Enable;
-  TIM_BDTRInitStructure.TIM_OSSIState = TIM_OSSIState_Enable;
-  TIM_BDTRInitStructure.TIM_LOCKLevel = TIM_LOCKLevel_OFF;
-  TIM_BDTRInitStructure.TIM_DeadTime = 0x90; //这里调整死区大小0-0xff
-  TIM_BDTRInitStructure.TIM_Break = TIM_Break_Disable;
-  TIM_BDTRInitStructure.TIM_BreakPolarity = TIM_BreakPolarity_High;
-  TIM_BDTRInitStructure.TIM_AutomaticOutput = TIM_AutomaticOutput_Enable;
-  TIM_BDTRConfig(TIM1, &TIM_BDTRInitStructure);
-  
-  //TIM1开启
-  //TIM_Cmd(TIM1, ENABLE);
-  //TIM1_OC通道输出PWM（一定要加）
-  TIM_CtrlPWMOutputs(TIM1, ENABLE);
-  
+  /* TIM3 enable counter */
+  TIM_Cmd(TIM_TIMER, ENABLE);
 }
+
+
+
+
+/******************************************************************************/
+/*                 STM32F0xx Peripherals Interrupt Handlers                   */
+/******************************************************************************/
+//moved to stm32f0xx_it.c

@@ -5,8 +5,6 @@
 #include "USART1.h"
 
 
-
-
 /* USART初始化 */
 void USART1_Init(void)
 {
@@ -17,8 +15,8 @@ void USART1_Init(void)
 	RCC_AHBPeriphClockCmd(GPIO_CLC, ENABLE);  //使能GPIOA的时钟
 	RCC_APB2PeriphClockCmd(UART_CLC, ENABLE);//使能USART的时钟
 	/* USART CONFIG */
-	GPIO_PinAFConfig(UART_PORT, GPIO_PinSource9, GPIO_AF_1);//PA9	TX
-	GPIO_PinAFConfig(UART_PORT, GPIO_PinSource10, GPIO_AF_1);//PA10 RX
+	GPIO_PinAFConfig(UART_PORT, UART_TX_PIN_SOURCE, UART_AF);//PA9	TX
+	GPIO_PinAFConfig(UART_PORT, UART_RX_PIN_SOURCE, UART_AF);//PA10 RX
 
 	GPIO_InitStructure.GPIO_Pin = UART_TX_PIN | UART_RX_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -48,18 +46,6 @@ void USART1_Init(void)
 
 }
 
-//=============================================================================
-//REPLACED IN stm32f0xx_it.c
-//=============================================================================
-//void USART1_IRQHandler(void)
-//{
-//  if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-//  {
-//    USART_SendData(USART1,USART_ReceiveData(USART1));
-//    while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == RESET);
-//  }
-//
-//}
 
 
 /**

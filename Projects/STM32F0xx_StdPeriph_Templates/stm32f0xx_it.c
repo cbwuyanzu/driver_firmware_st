@@ -29,8 +29,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_it.h"
-
-
+#include "TIM.h"
+#include "USART1.h"
+#include "ADC1.h"
+#include "main.h"
 /** @addtogroup STM32F0XX_IT
   * @brief Interrupts driver modules
   * @{
@@ -40,8 +42,10 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-extern uint8_t aRxBuffer[BUFFER_SIZE];
+
 __IO uint8_t RxCounter= 0, ReceiveState = 0;
+
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -98,11 +102,12 @@ void SysTick_Handler(void)
 {
 
 }
+
 /******************************************************************************/
 /*                 STM32F0xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
 /*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32f0xx.s).                                            */
+/*  file (startup_stm32f0x8.s).                                               */
 /******************************************************************************/
 /**
   * @brief  This function handles USARTy global interrupt request.
@@ -115,21 +120,33 @@ void USART1_IRQHandler(void)
   {
     /* Read one byte from the receive data register */
     aRxBuffer[RxCounter++] = USART_ReceiveData(USART1);
-
+    USART_ClearITPendingBit(USART1, USART_IT_RXNE);
     if(RxCounter == BUFFER_SIZE)
     {
       ReceiveState = 1;
       RxCounter = 0;
     }
   }
+  USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 }
-/******************************************************************************/
-/*                 STM32F0xx Peripherals Interrupt Handlers                   */
-/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
-/*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32f0x8.s).                                               */
-/******************************************************************************/
 
+/**
+* @brief  This function handles TIM3 global interrupt request.
+* @param  None
+* @retval None
+*/
+void TIM3_IRQHandler(void)
+{
+  //  static uint8_t cnt_5ms = 0;
+  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
+  {
+    TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
+    flag_5ms = 1;
+    uint16_t capture = TIM_GetCapture1(TIM3);
+    TIM_SetCompare1(TIM3, capture + CCR1_Val);
+    // STM_EVAL_LEDToggle(LED1);
+  }
+}
 /**
   * @brief  This function handles PPP interrupt request.
   * @param  None
