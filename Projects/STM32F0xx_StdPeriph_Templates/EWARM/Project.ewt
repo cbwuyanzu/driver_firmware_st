@@ -797,6 +797,9 @@
       <name>$PROJ_DIR$\..\..\..\BSP\ADC1.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\BSP\FLASH.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\BSP\LED.c</name>
     </file>
     <file>

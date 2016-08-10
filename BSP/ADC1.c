@@ -37,7 +37,7 @@ void ADC1_DMA_Init(void)
   ADC_InitStructure.ADC_ContinuousConvMode = ENABLE; 
   ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
   ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-  ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Backward;
+  ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;
   ADC_Init(ADC1, &ADC_InitStructure); 
 
   ADC_ChannelConfig(ADC1, ADC_Vout , ADC_SampleTime_55_5Cycles); 

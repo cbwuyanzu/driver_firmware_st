@@ -13,11 +13,11 @@
 #define ADC_GPIO_CLC_2  RCC_AHBPeriph_GPIOB
 
 #define ADC_CLC         RCC_APB2Periph_ADC1
-#define ADC_Vout		ADC_Channel_4
-#define ADC_Vin			ADC_Channel_5
-#define ADC_Iout		ADC_Channel_6
-#define ADC_Iin			ADC_Channel_7
-#define ADC_0_10v		ADC_Channel_8
+#define ADC_Vout	ADC_Channel_4
+#define ADC_Vin		ADC_Channel_5
+#define ADC_Iout	ADC_Channel_6
+#define ADC_Iin		ADC_Channel_7
+#define ADC_0_10v	ADC_Channel_8
 
 #define DMA_CLC         RCC_AHBPeriph_DMA1
 

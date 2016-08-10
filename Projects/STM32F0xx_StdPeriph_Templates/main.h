@@ -37,6 +37,9 @@
 #define BUFFER_SIZE     10
 extern uint8_t aRxBuffer[BUFFER_SIZE];
 extern uint8_t flag_5ms;
+extern uint8_t flag_1s;
+extern uint8_t flag_receive;
+extern uint8_t RxCounter;
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

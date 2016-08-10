@@ -43,7 +43,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
-__IO uint8_t RxCounter= 0, ReceiveState = 0;
+
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,7 +123,7 @@ void USART1_IRQHandler(void)
     USART_ClearITPendingBit(USART1, USART_IT_RXNE);
     if(RxCounter == BUFFER_SIZE)
     {
-      ReceiveState = 1;
+      flag_receive = 1;
       RxCounter = 0;
     }
   }
@@ -142,6 +142,13 @@ void TIM3_IRQHandler(void)
   {
     TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
     flag_5ms = 1;
+    static uint16_t cnt_1s = 0;
+    cnt_1s++;
+    if (cnt_1s >= 200)
+    {
+      cnt_1s = 0;
+      flag_1s = 1;
+    }
     uint16_t capture = TIM_GetCapture1(TIM3);
     TIM_SetCompare1(TIM3, capture + CCR1_Val);
     // STM_EVAL_LEDToggle(LED1);

@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=1126084786
+Checksum=-1725377395
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -38,6 +38,14 @@ ITMlogFile=$PROJ_DIR$\ITM.log
 Enabled=_ 0
 [array_types]
 Fmt0=uint16_t[6]	4	0
+[watch_formats]
+Fmt0={W}1:V_0_10v	4	0
+Fmt1={W}1:current_max	4	0
+Fmt2={W}1:current_min	4	0
+Fmt3={W}1:current_program	4	0
+Fmt4={W}1:data_1	4	0
+Fmt5={W}1:data_2	4	0
+Fmt6={W}1:data_3	4	0
 [Trace2]
 Enabled=0
 ShowSource=0
@@ -66,7 +74,8 @@ SumSortOrder=0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Count=0
+Bp0=_ 0 "EMUL_CODE" "0x08000866" 0 0 1 "" 0 "" 0
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
